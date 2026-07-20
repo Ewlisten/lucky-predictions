@@ -1,0 +1,323 @@
+/* Builds on styles.css (variables, fonts, body reset). Dashboard-only components below. */
+
+:root {
+  --lock-color: #ffd54a;
+  --lock-bg: rgba(255, 213, 74, 0.12);
+  --strong-color: #b8c4d1;
+  --strong-bg: rgba(184, 196, 209, 0.1);
+  --lean-color: #cd7f32;
+  --lean-bg: rgba(205, 127, 50, 0.08);
+  --over-color: #4ade80;
+  --over-bg: rgba(34, 197, 94, 0.14);
+  --under-color: #f87171;
+  --under-bg: rgba(239, 68, 68, 0.14);
+}
+
+/* ---------- Sticky top bar ---------- */
+
+.dash-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1.5rem;
+  background: rgba(8, 8, 8, 0.96);
+  border-bottom: 1px solid var(--border-faint);
+}
+
+.dash-logo {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.last-updated {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+/* ---------- Hero ---------- */
+
+.dash-hero {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 7vw 1.25rem;
+}
+
+.dash-hero h1 {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  letter-spacing: -0.02em;
+  margin: 0 0 0.4rem;
+}
+
+.dash-hero p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+/* ---------- Filter bar ---------- */
+
+.filter-bar {
+  position: sticky;
+  top: 49px;
+  z-index: 40;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 7vw;
+  background: rgba(8, 8, 8, 0.98);
+  border-bottom: 1px solid var(--border-faint);
+}
+
+.tier-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.pill-btn {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.4rem 0.8rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.18s;
+  white-space: nowrap;
+}
+
+.pill-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.pill-btn.active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.filter-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+#stat-select {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 0.4rem 0.6rem;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 2px;
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.view-btn {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  padding: 0.4rem 0.65rem;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.view-btn.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* ---------- Content ---------- */
+
+.dash-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 7vw 4rem;
+}
+
+.empty-state {
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  padding: 3rem 0;
+  text-align: center;
+}
+
+#cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+#cards-container.view-list {
+  grid-template-columns: 1fr;
+  max-width: 640px;
+}
+
+/* ---------- Pick card ---------- */
+
+.pick-card {
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1.25rem 1.2rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.pick-card.tier-lock {
+  border-color: rgba(255, 213, 74, 0.45);
+}
+
+.pick-card.tier-strong {
+  border-color: rgba(184, 196, 209, 0.3);
+}
+
+.pick-card.tier-lean {
+  opacity: 0.82;
+}
+
+.tier-badge {
+  position: absolute;
+  top: -10px;
+  left: 14px;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.6rem;
+  border-radius: 2px;
+}
+
+.tier-badge.lock {
+  background: var(--lock-color);
+  color: #241a00;
+}
+
+.tier-badge.strong {
+  background: var(--strong-color);
+  color: #141821;
+}
+
+.tier-badge.lean {
+  background: transparent;
+  border: 1px solid rgba(205, 127, 50, 0.55);
+  color: var(--lean-color);
+  font-size: 0.56rem;
+  padding: 0.22rem 0.5rem;
+}
+
+.pick-head {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.player-name {
+  font-family: var(--font-head);
+  font-weight: 500;
+  font-size: 1.15rem;
+  color: var(--text);
+}
+
+.pick-card.tier-lean .player-name {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.opponent {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.pick-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.direction-pill {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  padding: 0.3rem 0.6rem;
+  border-radius: 2px;
+  border: 1px solid transparent;
+}
+
+.dir-over {
+  background: var(--over-bg);
+  color: var(--over-color);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+.dir-under {
+  background: var(--under-bg);
+  color: var(--under-color);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.stat-line {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.reasoning {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.pick-card.tier-lean .reasoning {
+  color: var(--text-dim);
+  font-size: 0.76rem;
+}
+
+@media (max-width: 640px) {
+  .filter-bar {
+    top: 45px;
+  }
+}

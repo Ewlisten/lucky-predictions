@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUCKY#s</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Lato:wght@300;400;700&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="landing-wrap">
+    <div class="landing-card">
+      <div class="landing-eyebrow">Members Only</div>
+      <h1>LUCKY#s</h1>
+      <p>Enter password to continue</p>
+      <form class="landing-form" id="login-form">
+        <input type="password" id="password" name="password" placeholder="Password" autocomplete="current-password" required>
+        <button type="submit">Enter</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      window.location.href = 'dashboard.html';
+    });
+  </script>
+</body>
+</html>

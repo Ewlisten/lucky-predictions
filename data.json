@@ -1,0 +1,22 @@
+[
+  {
+    "player": "A'ja Wilson",
+    "team": "LVA",
+    "opponent": "NYL",
+    "props": [
+      { "stat": "Points", "line": 22.5 },
+      { "stat": "Rebounds", "line": 9.5 },
+      { "stat": "Assists", "line": 2.5 }
+    ]
+  },
+  {
+    "player": "Breanna Stewart",
+    "team": "NYL",
+    "opponent": "LVA",
+    "props": [
+      { "stat": "Points", "line": 20.5 },
+      { "stat": "Rebounds", "line": 8.5 },
+      { "stat": "Assists", "line": 3.5 }
+    ]
+  }
+]

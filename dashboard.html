@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUCKY#s — Picks Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Lato:wght@300;400;700&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+  <div class="dash-topbar">
+    <span class="dash-logo">LUCKY#s</span>
+    <span id="last-updated" class="last-updated">Loading…</span>
+  </div>
+
+  <header class="dash-hero">
+    <h1>Today's Picks</h1>
+    <p>WNBA player props, ranked by confidence.</p>
+  </header>
+
+  <div class="filter-bar">
+    <div class="tier-pills" id="tier-pills">
+      <button class="pill-btn active" data-tier="all">All</button>
+      <button class="pill-btn" data-tier="lock">⭐⭐⭐ Lock</button>
+      <button class="pill-btn" data-tier="strong">⭐⭐ Strong</button>
+      <button class="pill-btn" data-tier="lean">⭐ Lean</button>
+    </div>
+    <div class="filter-bar-right">
+      <select id="stat-select">
+        <option value="all">All Stats</option>
+      </select>
+      <div class="view-toggle" id="view-toggle">
+        <button class="view-btn active" data-view="grid">Grid</button>
+        <button class="view-btn" data-view="list">List</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="dash-content">
+    <div id="status-message">Loading picks…</div>
+    <div id="cards-container"></div>
+  </main>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+:root {
+  --bg: #080808;
+  --bg-elevated: #111108;
+  --card-bg: #0c0800;
+  --border: #1e1e14;
+  --border-faint: #161616;
+  --text: #fff;
+  --text-muted: rgba(255, 255, 255, 0.5);
+  --text-dim: rgba(255, 255, 255, 0.28);
+  --accent: #F58426;
+  --accent-soft: rgba(245, 132, 38, 0.12);
+  --font-head: 'Oswald', sans-serif;
+  --font-body: 'Lato', sans-serif;
+  --font-mono: 'Roboto Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.5;
+}
+
+/* ---------- Landing page ---------- */
+
+.landing-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.landing-card {
+  width: 100%;
+  max-width: 380px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 44px 32px;
+  text-align: center;
+}
+
+.landing-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.landing-card h1 {
+  font-family: var(--font-head);
+  font-weight: 700;
+  margin: 0 0 8px;
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.landing-card p {
+  margin: 0 0 28px;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.landing-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.landing-form input[type="password"] {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 2px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.9rem;
+  font-family: var(--font-body);
+}
+
+.landing-form input[type="password"]:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.landing-form button {
+  padding: 12px 14px;
+  border-radius: 2px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.landing-form button:hover {
+  opacity: 0.8;
+  transform: translateY(-1px);
+}
+
+/* ---------- Homepage / data page ---------- */
+
+.page-header {
+  padding: 3.5rem 7vw 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  border-bottom: 1px solid var(--border-faint);
+}
+
+.page-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--text-dim);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.page-eyebrow-line {
+  height: 1px;
+  background: #222;
+  width: 60px;
+  flex-shrink: 0;
+}
+
+.page-header h1 {
+  font-family: var(--font-head);
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.page-header p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  max-width: 520px;
+  line-height: 1.7;
+}
+
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2.5rem 7vw 4rem;
+}
+
+#status-message {
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  padding: 20px 0;
+}
+
+.props-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.prop-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 20px;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.prop-card:hover {
+  border-color: var(--accent);
+  background: #1a1a0a;
+}
+
+.prop-card .player-name {
+  font-family: var(--font-head);
+  font-weight: 500;
+  font-size: 1.15rem;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.prop-card .team-meta {
+  font-family: var(--font-mono);
+  color: var(--text-dim);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.prop-card .stat-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 7px 0;
+  border-top: 1px solid var(--border-faint);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.prop-card .stat-line:first-of-type {
+  border-top: none;
+}
+
+.prop-card .stat-value {
+  font-family: var(--font-head);
+  color: var(--accent);
+  font-weight: 500;
+  font-size: 1rem;
+}
