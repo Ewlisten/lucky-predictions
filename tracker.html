@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUCKY#s — Track Record</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Lato:wght@300;400;700&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="tracker.css">
+</head>
+<body>
+
+  <div class="dash-topbar">
+    <div class="dash-topbar-left">
+      <span class="dash-logo">LUCKY#s</span>
+      <a class="nav-link" href="dashboard.html">Today's Picks</a>
+    </div>
+    <span id="last-updated" class="last-updated">Loading…</span>
+  </div>
+
+  <header class="dash-hero">
+    <h1>Track Record</h1>
+    <p>Every pick, every result. Nothing hidden.</p>
+  </header>
+
+  <section id="tracker-summary" class="tracker-summary"></section>
+
+  <div class="filter-bar">
+    <div class="tracker-pills-row" id="tracker-pills-row">
+      <div class="pill-group" id="tier-pills">
+        <button class="pill-btn active" data-group="tier" data-value="all">All</button>
+        <button class="pill-btn" data-group="tier" data-value="lock">⭐⭐⭐ Lock</button>
+        <button class="pill-btn" data-group="tier" data-value="strong">⭐⭐ Strong</button>
+        <button class="pill-btn" data-group="tier" data-value="lean">⭐ Lean</button>
+      </div>
+      <span class="pill-divider"></span>
+      <div class="pill-group" id="stat-pills">
+        <button class="pill-btn active" data-group="stat" data-value="all">All Stats</button>
+        <button class="pill-btn" data-group="stat" data-value="PTS">PTS</button>
+        <button class="pill-btn" data-group="stat" data-value="REB">REB</button>
+        <button class="pill-btn" data-group="stat" data-value="AST">AST</button>
+        <button class="pill-btn" data-group="stat" data-value="FG3M">FG3M</button>
+        <button class="pill-btn" data-group="stat" data-value="STL">STL</button>
+        <button class="pill-btn" data-group="stat" data-value="BLK">BLK</button>
+        <button class="pill-btn" data-group="stat" data-value="TOV">TOV</button>
+      </div>
+      <span class="pill-divider"></span>
+      <div class="pill-group" id="date-pills">
+        <button class="pill-btn active" data-group="date" data-value="all">All Time</button>
+        <button class="pill-btn" data-group="date" data-value="7d">Last 7 Days</button>
+        <button class="pill-btn" data-group="date" data-value="30d">Last 30 Days</button>
+        <button class="pill-btn" data-group="date" data-value="custom">Custom</button>
+      </div>
+    </div>
+    <div class="custom-date-range" id="custom-date-range" hidden>
+      <label>From <input type="date" id="date-from"></label>
+      <label>To <input type="date" id="date-to"></label>
+    </div>
+  </div>
+
+  <main class="dash-content">
+    <div id="status-message">Loading track record…</div>
+    <div class="tracker-table-wrap">
+      <table id="tracker-table">
+        <thead>
+          <tr>
+            <th data-sort="date">Date</th>
+            <th data-sort="player">Player</th>
+            <th data-sort="matchup">Matchup</th>
+            <th data-sort="prop">Prop</th>
+            <th data-sort="pick">Pick</th>
+            <th data-sort="tier">Tier</th>
+            <th data-sort="result">Result</th>
+          </tr>
+        </thead>
+        <tbody id="tracker-tbody"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="tracker.js"></script>
+</body>
+</html>

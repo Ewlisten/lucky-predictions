@@ -246,12 +246,6 @@ async function loadRows() {
   return null;
 }
 
-async function loadExcludedKeys() {
-  const stamp = toDashDateStamp(new Date());
-  const list = await tryFetchJSON(`data/suppressed_${stamp}.json`);
-  return new Set(Array.isArray(list) ? list : []);
-}
-
 // ---------- Rendering ----------
 
 const state = {
@@ -259,6 +253,7 @@ const state = {
   tierFilter: 'all',
   statFilter: 'all',
   viewMode: 'grid',
+  hiddenKeys: new Set(),
 };
 
 const els = {
@@ -268,6 +263,8 @@ const els = {
   tierPills: document.getElementById('tier-pills'),
   statSelect: document.getElementById('stat-select'),
   viewToggle: document.getElementById('view-toggle'),
+  exportBtn: document.getElementById('export-hidden'),
+  hiddenCount: document.getElementById('hidden-count'),
 };
 
 function formatLastUpdated(dateStr) {
@@ -292,10 +289,15 @@ function formatLastUpdated(dateStr) {
   return `Last updated: ${label}`;
 }
 
+function pickKey(pick) {
+  return `${pick.player}:${pick.statKey}`;
+}
+
 function applyFilters() {
   return state.allPicks.filter((p) => {
     if (state.tierFilter !== 'all' && p.tier.key !== state.tierFilter) return false;
     if (state.statFilter !== 'all' && p.statKey !== state.statFilter) return false;
+    if (state.hiddenKeys.has(pickKey(p))) return false;
     return true;
   });
 }
@@ -348,6 +350,17 @@ function buildCardNode(pick) {
     card.appendChild(reasoning);
   }
 
+  const hideBtn = document.createElement('button');
+  hideBtn.type = 'button';
+  hideBtn.className = 'hide-btn';
+  hideBtn.textContent = 'Hide';
+  hideBtn.addEventListener('click', () => {
+    state.hiddenKeys.add(pickKey(pick));
+    updateHiddenCount();
+    render();
+  });
+  card.appendChild(hideBtn);
+
   return card;
 }
 
@@ -375,6 +388,26 @@ function populateStatSelect() {
   });
 }
 
+function updateHiddenCount() {
+  if (!els.hiddenCount) return;
+  const n = state.hiddenKeys.size;
+  els.hiddenCount.textContent = n === 1 ? '1 hidden' : `${n} hidden`;
+}
+
+function exportHidden() {
+  const keys = Array.from(state.hiddenKeys);
+  const json = JSON.stringify(keys);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `suppressed_${toDashDateStamp(new Date())}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
 function wireControls() {
   els.tierPills.addEventListener('click', (e) => {
     const btn = e.target.closest('.pill-btn');
@@ -398,11 +431,14 @@ function wireControls() {
     state.viewMode = btn.dataset.view;
     els.cards.classList.toggle('view-list', state.viewMode === 'list');
   });
+
+  els.exportBtn.addEventListener('click', exportHidden);
 }
 
 async function init() {
   populateStatSelect();
   wireControls();
+  updateHiddenCount();
 
   const rows = await loadRows();
   if (!rows) {
@@ -410,8 +446,7 @@ async function init() {
     return;
   }
 
-  const excluded = await loadExcludedKeys();
-  state.allPicks = buildPicks(rows).filter((p) => !excluded.has(`${p.player}:${p.statKey}`));
+  state.allPicks = buildPicks(rows);
   els.updated.textContent = formatLastUpdated(rows[0] && rows[0].DATE);
   els.status.style.display = 'none';
   render();

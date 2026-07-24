@@ -3,24 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LUCKY#s — Picks Dashboard</title>
+  <meta name="robots" content="noindex, nofollow">
+  <title>Review — Internal</title>
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;700&family=Lato:wght@300;400;700&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="review.css">
 </head>
 <body>
 
   <div class="dash-topbar">
     <div class="dash-topbar-left">
-      <span class="dash-logo">LUCKY#s</span>
-      <a class="nav-link" href="tracker.html">Check our work</a>
+      <span class="dash-logo">LUCKY#s — REVIEW</span>
     </div>
     <span id="last-updated" class="last-updated">Loading…</span>
   </div>
 
   <header class="dash-hero">
-    <h1>Today's Picks</h1>
-    <p>WNBA player props, ranked by confidence.</p>
+    <h1>Morning Review</h1>
+    <p>Hide anything stale before publishing. Not visible to the public.</p>
   </header>
 
   <div class="filter-bar">
@@ -38,6 +39,8 @@
         <button class="view-btn active" data-view="grid">Grid</button>
         <button class="view-btn" data-view="list">List</button>
       </div>
+      <span id="hidden-count" class="hidden-count">0 hidden</span>
+      <button type="button" id="export-hidden" class="export-btn">Export hidden picks</button>
     </div>
   </div>
 
@@ -46,6 +49,6 @@
     <div id="cards-container"></div>
   </main>
 
-  <script src="dashboard.js"></script>
+  <script src="review.js"></script>
 </body>
 </html>

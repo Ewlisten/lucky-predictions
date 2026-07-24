@@ -28,6 +28,12 @@
   border-bottom: 1px solid var(--border-faint);
 }
 
+.dash-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
 .dash-logo {
   font-family: var(--font-head);
   font-weight: 700;
@@ -43,6 +49,24 @@
   text-transform: uppercase;
   color: var(--text-dim);
   white-space: nowrap;
+}
+
+.nav-link {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.7rem;
+  border-radius: 2px;
+  transition: all 0.18s;
+}
+
+.nav-link:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 /* ---------- Hero ---------- */

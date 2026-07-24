@@ -97,6 +97,15 @@ body {
   border-color: var(--accent);
 }
 
+.landing-error {
+  margin-top: -6px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  color: #f87171;
+  text-align: left;
+}
+
 .landing-form button {
   padding: 12px 14px;
   border-radius: 2px;
