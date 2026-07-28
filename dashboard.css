@@ -328,6 +328,14 @@
   letter-spacing: 0.02em;
 }
 
+.model-proj {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+  color: var(--text-dim);
+}
+
 .reasoning {
   margin: 0;
   font-size: 0.8rem;

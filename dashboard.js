@@ -155,6 +155,7 @@ function buildPicks(rows) {
       const line = row[`${key}_LINE`];
       const rec = row[`${key}_REC`];
       const edge = row[`${key}_EDGE`];
+      const projection = row[key];
       const oppTierRaw = row[`${key}_OPP_TIER`] || row[`ALLOW_${key}_TIER`] || '';
 
       if (!line || !rec) return;
@@ -174,6 +175,7 @@ function buildPicks(rows) {
         statLabel: label,
         line,
         direction,
+        projection,
         tier,
         reasoning: getReasoning(normalizeOppTier(oppTierRaw), label),
       });
@@ -340,6 +342,14 @@ function buildCardNode(pick) {
   row.appendChild(statLine);
 
   card.appendChild(row);
+
+  const projNum = parseFloat(pick.projection);
+  if (!Number.isNaN(projNum)) {
+    const proj = document.createElement('p');
+    proj.className = 'model-proj';
+    proj.textContent = `Model projects ${projNum.toFixed(1)} ${pick.statKey}`;
+    card.appendChild(proj);
+  }
 
   if (pick.reasoning) {
     const reasoning = document.createElement('p');
