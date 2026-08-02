@@ -233,10 +233,12 @@ async function tryFetchCSV(path) {
 
 const LOOKBACK_DAYS = 14;
 
+// Picks for tomorrow's slate are sometimes dropped the evening before, so
+// check tomorrow's stamp first, then walk backward from today.
 async function loadRows() {
   const today = new Date();
 
-  for (let i = 0; i < LOOKBACK_DAYS; i++) {
+  for (let i = -1; i < LOOKBACK_DAYS; i++) {
     const d = new Date(today);
     d.setDate(today.getDate() - i);
     const stamp = toDateStamp(d);
@@ -248,8 +250,8 @@ async function loadRows() {
   return null;
 }
 
-async function loadExcludedKeys() {
-  const stamp = toDashDateStamp(new Date());
+async function loadExcludedKeys(dateStr) {
+  const stamp = dateStr || toDashDateStamp(new Date());
   const list = await tryFetchJSON(`data/suppressed_${stamp}.json`);
   return new Set(Array.isArray(list) ? list : []);
 }
@@ -420,7 +422,7 @@ async function init() {
     return;
   }
 
-  const excluded = await loadExcludedKeys();
+  const excluded = await loadExcludedKeys(rows[0] && rows[0].DATE);
   state.allPicks = buildPicks(rows).filter((p) => !excluded.has(`${p.player}:${p.statKey}`));
   els.updated.textContent = formatLastUpdated(rows[0] && rows[0].DATE);
   els.status.style.display = 'none';
