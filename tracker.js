@@ -197,6 +197,7 @@ const state = {
   allRows: [],
   tierFilter: 'all',
   statFilter: 'all',
+  directionFilter: 'all',
   dateFilter: 'all',
   customFrom: null,
   customTo: null,
@@ -208,6 +209,7 @@ const els = {
   status: document.getElementById('status-message'),
   updated: document.getElementById('last-updated'),
   summary: document.getElementById('tracker-summary'),
+  filteredSummary: document.getElementById('filtered-summary'),
   pillsRow: document.getElementById('tracker-pills-row'),
   customRange: document.getElementById('custom-date-range'),
   dateFrom: document.getElementById('date-from'),
@@ -235,6 +237,7 @@ function applyFilters(rows) {
   return rows.filter((r) => {
     if (state.tierFilter !== 'all' && r.tierKey !== state.tierFilter) return false;
     if (state.statFilter !== 'all' && r.statKey !== state.statFilter) return false;
+    if (state.directionFilter !== 'all' && r.pick !== state.directionFilter) return false;
     if (!passesDateFilter(r)) return false;
     return true;
   });
@@ -307,6 +310,49 @@ function renderSummary() {
     badge.textContent = `🔥 ${streak} hit streak`;
     els.summary.appendChild(badge);
   }
+}
+
+// ---------- Rendering: filtered hit rate ----------
+
+const TIER_LABELS = { lock: '⭐⭐⭐ Lock', strong: '⭐⭐ Strong', lean: '⭐ Lean' };
+const DIRECTION_LABELS = { OVER: 'Overs', UNDER: 'Unders' };
+const DATE_LABELS = { '7d': 'Last 7 Days', '30d': 'Last 30 Days', custom: 'Custom Range' };
+
+function activeFilterLabel() {
+  const parts = [];
+  if (state.tierFilter !== 'all') parts.push(TIER_LABELS[state.tierFilter]);
+  if (state.statFilter !== 'all') parts.push(state.statFilter);
+  if (state.directionFilter !== 'all') parts.push(DIRECTION_LABELS[state.directionFilter]);
+  if (state.dateFilter !== 'all') parts.push(DATE_LABELS[state.dateFilter]);
+  return parts.length ? parts.join(' · ') : 'All Picks';
+}
+
+function renderFilteredSummary() {
+  const filtered = applyFilters(state.allRows);
+  const rate = computeHitRate(filtered);
+  const pending = filtered.length - rate.total;
+
+  els.filteredSummary.innerHTML = '';
+
+  const tile = document.createElement('div');
+  tile.className = 'filtered-summary-tile';
+
+  const label = document.createElement('span');
+  label.className = 'filtered-summary-label';
+  label.textContent = activeFilterLabel();
+  tile.appendChild(label);
+
+  const value = document.createElement('span');
+  value.className = 'filtered-summary-value';
+  value.textContent = formatPct(rate.pct);
+  tile.appendChild(value);
+
+  const sub = document.createElement('span');
+  sub.className = 'filtered-summary-sub';
+  sub.textContent = `${rate.hits}/${rate.total} hit` + (pending > 0 ? ` · ${pending} pending` : '');
+  tile.appendChild(sub);
+
+  els.filteredSummary.appendChild(tile);
 }
 
 // ---------- Rendering: table ----------
@@ -413,6 +459,7 @@ function updateSortIndicators() {
 
 function render() {
   renderSummary();
+  renderFilteredSummary();
   renderTable();
   updateSortIndicators();
 }
@@ -431,20 +478,24 @@ function wireControls() {
 
     if (group === 'tier') state.tierFilter = value;
     if (group === 'stat') state.statFilter = value;
+    if (group === 'direction') state.directionFilter = value;
     if (group === 'date') {
       state.dateFilter = value;
       els.customRange.hidden = value !== 'custom';
     }
+    renderFilteredSummary();
     renderTable();
   });
 
   els.dateFrom.addEventListener('change', () => {
     state.customFrom = els.dateFrom.value ? parseTrackerDate(els.dateFrom.value) : null;
+    renderFilteredSummary();
     renderTable();
   });
 
   els.dateTo.addEventListener('change', () => {
     state.customTo = els.dateTo.value ? parseTrackerDate(els.dateTo.value) : null;
+    renderFilteredSummary();
     renderTable();
   });
 

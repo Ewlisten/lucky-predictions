@@ -46,6 +46,12 @@
         <button class="pill-btn" data-group="stat" data-value="TOV">TOV</button>
       </div>
       <span class="pill-divider"></span>
+      <div class="pill-group" id="direction-pills">
+        <button class="pill-btn active" data-group="direction" data-value="all">Over/Under</button>
+        <button class="pill-btn" data-group="direction" data-value="OVER">▲ Overs</button>
+        <button class="pill-btn" data-group="direction" data-value="UNDER">▼ Unders</button>
+      </div>
+      <span class="pill-divider"></span>
       <div class="pill-group" id="date-pills">
         <button class="pill-btn active" data-group="date" data-value="all">All Time</button>
         <button class="pill-btn" data-group="date" data-value="7d">Last 7 Days</button>
@@ -58,6 +64,8 @@
       <label>To <input type="date" id="date-to"></label>
     </div>
   </div>
+
+  <section id="filtered-summary" class="filtered-summary"></section>
 
   <main class="dash-content">
     <div id="status-message">Loading track record…</div>

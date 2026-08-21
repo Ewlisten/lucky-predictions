@@ -63,23 +63,61 @@
   white-space: nowrap;
 }
 
-/* ---------- Filter pills row (scrolls, does not wrap) ---------- */
+/* ---------- Filtered hit-rate bar ---------- */
+
+.filtered-summary {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 7vw 1rem;
+}
+
+.filtered-summary-tile {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem 1rem;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  padding: 0.75rem 1.1rem;
+}
+
+.filtered-summary-label {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  flex: 1 1 auto;
+}
+
+.filtered-summary-value {
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--accent);
+}
+
+.filtered-summary-sub {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--text-dim);
+}
+
+/* ---------- Filter pills row (wraps instead of scrolling) ---------- */
 
 .tracker-pills-row {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.4rem;
-  overflow-x: auto;
+  gap: 0.5rem 0.4rem;
   width: 100%;
-  padding-bottom: 2px;
 }
 
 .pill-group {
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   gap: 0.4rem;
-  flex-shrink: 0;
 }
 
 .pill-divider {
@@ -88,6 +126,12 @@
   background: var(--border);
   flex-shrink: 0;
   margin: 0 0.2rem;
+}
+
+@media (max-width: 640px) {
+  .pill-divider {
+    display: none;
+  }
 }
 
 .custom-date-range {
