@@ -67,10 +67,29 @@ function passesFilters(stat, rec, edge) {
 // Single source of truth for the confidence-tier mapping. rec/oppTier are raw
 // strings straight from the sheet; everything else is derived from this.
 function getTier(rec, oppTier) {
+  if (!oppTier) return getTierFromRec(rec);
   const strength = getStrength(rec);
   const opp = normalizeOppTier(oppTier);
   if (!strength || !opp) return null;
   return TIER_MAP[strength][opp] || null;
+}
+
+// NBA files have no opponent-tier columns; the model bakes the tier into the
+// REC string itself ("🔒 LOCK OVER", "🔥 STRONG UNDER", "✅ LEAN OVER").
+// CHECK / PASS / NO LINE are not picks.
+const REC_TIERS = {
+  LOCK: { stars: 3, label: '⭐⭐⭐ LOCK', key: 'lock' },
+  STRONG: { stars: 2, label: '⭐⭐ STRONG', key: 'strong' },
+  LEAN: { stars: 1, label: '⭐ LEAN', key: 'lean' },
+};
+
+function getTierFromRec(rec) {
+  if (!rec) return null;
+  const upper = rec.toUpperCase();
+  if (upper.includes('LOCK')) return REC_TIERS.LOCK;
+  if (upper.includes('STRONG')) return REC_TIERS.STRONG;
+  if (upper.includes('LEAN')) return REC_TIERS.LEAN;
+  return null;
 }
 
 function getReasoning(normalizedOppTier, statLabel) {
@@ -149,7 +168,7 @@ function buildPicks(rows) {
 
   rows.forEach((row, rowIndex) => {
     const player = row.PLAYER || '';
-    const opponent = row.OPP_ABBR || row.OPPONENT || '';
+    const opponent = row.OPP_ABBR || row.OPPONENT || row.OPP || '';
 
     STATS.forEach(({ key, label }) => {
       const line = row[`${key}_LINE`];
@@ -158,7 +177,7 @@ function buildPicks(rows) {
       const projection = row[key];
       const oppTierRaw = row[`${key}_OPP_TIER`] || row[`ALLOW_${key}_TIER`] || '';
 
-      if (!line || !rec) return;
+      if (!line || line === 'NA' || !rec) return;
       if (!passesFilters(key, rec, edge)) return;
 
       const tier = getTier(rec, oppTierRaw);
@@ -192,9 +211,10 @@ function buildPicks(rows) {
 }
 
 // ---------- Data loading ----------
-// Convention: the daily file is named data/wnba_preds_YYYYMMDD.csv/nba_preds_YYYYMMDD.csv (or .json).
-// Drop a new file with today's date in /data and the page picks it up with
-// no code changes. Falls back one day back in case of a late upload.
+// Convention: the daily file is named data/nba_preds_YYYYMMDD.csv (or .json),
+// where the date is the game date. Drop it in /data and the page picks it up
+// with no code changes. Today's slate wins; otherwise the nearest upcoming
+// slate (files are often printed days ahead), then the most recent past one.
 
 function pad2(n) {
   return String(n).padStart(2, '0');
@@ -231,23 +251,31 @@ async function tryFetchCSV(path) {
   }
 }
 
+const LOOKAHEAD_DAYS = 7;
 const LOOKBACK_DAYS = 14;
 
-// Picks for tomorrow's slate are sometimes dropped the evening before, so
-// check tomorrow's stamp first, then walk backward from today.
+async function loadForStamp(stamp) {
+  return (
+    (await tryFetchJSON(`data/nba_preds_${stamp}.json`)) ||
+    (await tryFetchCSV(`data/nba_preds_${stamp}.csv`))
+  );
+}
+
 async function loadRows() {
   const today = new Date();
+  // Day offsets in priority order: today, +1..+7, then -1..-14.
+  const offsets = [0];
+  for (let i = 1; i <= LOOKAHEAD_DAYS; i++) offsets.push(i);
+  for (let i = 1; i <= LOOKBACK_DAYS; i++) offsets.push(-i);
 
-  for (let i = -1; i < LOOKBACK_DAYS; i++) {
-    const d = new Date(today);
-    d.setDate(today.getDate() - i);
-    const stamp = toDateStamp(d);
-    const fromJson = await tryFetchJSON(`data/nba_preds_${stamp}.json`);
-    if (fromJson) return fromJson;
-    const fromCsv = await tryFetchCSV(`data/nba_preds_${stamp}.csv`);
-    if (fromCsv) return fromCsv;
-  }
-  return null;
+  const results = await Promise.all(
+    offsets.map((offset) => {
+      const d = new Date(today);
+      d.setDate(today.getDate() + offset);
+      return loadForStamp(toDateStamp(d));
+    })
+  );
+  return results.find(Boolean) || null;
 }
 
 async function loadExcludedKeys(dateStr) {
