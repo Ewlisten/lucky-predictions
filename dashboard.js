@@ -192,7 +192,7 @@ function buildPicks(rows) {
 }
 
 // ---------- Data loading ----------
-// Convention: the daily file is named data/wnba_preds_YYYYMMDD.csv (or .json).
+// Convention: the daily file is named data/wnba_preds_YYYYMMDD.csv/nba_preds_YYYYMMDD.csv (or .json).
 // Drop a new file with today's date in /data and the page picks it up with
 // no code changes. Falls back one day back in case of a late upload.
 
@@ -242,9 +242,9 @@ async function loadRows() {
     const d = new Date(today);
     d.setDate(today.getDate() - i);
     const stamp = toDateStamp(d);
-    const fromJson = await tryFetchJSON(`data/wnba_preds_${stamp}.json`);
+    const fromJson = await tryFetchJSON(`data/nba_preds_${stamp}.json`);
     if (fromJson) return fromJson;
-    const fromCsv = await tryFetchCSV(`data/wnba_preds_${stamp}.csv`);
+    const fromCsv = await tryFetchCSV(`data/nba_preds_${stamp}.csv`);
     if (fromCsv) return fromCsv;
   }
   return null;
