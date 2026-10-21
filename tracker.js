@@ -88,9 +88,17 @@ function parseTrackerDate(raw) {
   return Number.isNaN(d.getTime()) ? null : d;
 }
 
+// Tracker sheet variants (e.g. "STLS", "BLKS", "3PM") mapped to canonical stat keys
+const STAT_ALIASES = {
+  STLS: 'STL', BLKS: 'BLK', TOVS: 'TOV', TO: 'TOV',
+  '3PM': 'FG3M', '3PTM': 'FG3M', THREES: 'FG3M',
+  REBS: 'REB', ASTS: 'AST', POINTS: 'PTS',
+};
+
 function normalizeStat(raw) {
   const up = (raw || '').trim().toUpperCase();
-  return STATS.includes(up) ? up : '';
+  const key = STAT_ALIASES[up] || up;
+  return STATS.includes(key) ? key : '';
 }
 
 function normalizePick(raw) {
@@ -177,7 +185,7 @@ function formatPct(pct) {
 
 // ---------- Data loading ----------
 
-const TRACKER_CSV_PATH = 'data/WNBA Prop Tracker 27 - DATA 26-27.csv';
+const TRACKER_CSV_PATH = 'data/Prop Tracker 27 - DATA 26-27.csv';
 
 async function loadTrackerRows() {
   try {
