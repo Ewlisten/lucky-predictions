@@ -192,7 +192,16 @@ async function loadTrackerRows() {
     const res = await fetch(encodeURI(TRACKER_CSV_PATH), { cache: 'no-store' });
     if (!res.ok) return null;
     const text = await res.text();
-    const rows = parseCSV(text).filter((row) => pickField(row, 'date') || pickField(row, 'player'));
+    const rows = parseCSV(text).map((row) => {
+      // Sheet exports sometimes corrupt the A1 header (e.g. "A2308"); the first column is always the date.
+      const keys = Object.keys(row);
+      if (keys.length && normalizeHeaderKey(keys[0]) !== 'date' && !('date' in Object.fromEntries(keys.map((k) => [normalizeHeaderKey(k), 1])))) {
+        const fixed = { date: row[keys[0]] };
+        keys.slice(1).forEach((k) => { fixed[k] = row[k]; });
+        return fixed;
+      }
+      return row;
+    }).filter((row) => pickField(row, 'date') || pickField(row, 'player'));
     return rows.length ? rows : null;
   } catch {
     return null;
